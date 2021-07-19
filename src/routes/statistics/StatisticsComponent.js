@@ -56,12 +56,12 @@ import PieChart from './PieChart';
     } else if(value && value.female) {
       arr = [
         {
-          "id": "Есть",
+          "id": "",
           "label": "Женщины",
           "value": value.female,
         },
         {
-          "id": "Нет",
+          "id": "",
           "label": "Мужчины",
           "value": value.male,
         }
