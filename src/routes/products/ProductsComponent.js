@@ -79,8 +79,6 @@ function ProductsComponent() {
   const allFoods = useSelector((state) => state.allFoods);
   const { errorAllFoods, allFoodsData } = allFoods;
 
-  console.log(allFoodsData)
-
   useEffect(() => {
     if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
       dispatch(signout());
@@ -134,6 +132,7 @@ function ProductsComponent() {
                         pageSize: 3,
                         defaultCurrent: 1}}
                     columns={columns}
+                    rowKey="id"
                     dataSource={allFoodsData} />
             </Row>
         </Column>

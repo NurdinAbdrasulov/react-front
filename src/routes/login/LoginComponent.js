@@ -1,11 +1,12 @@
 import React from 'react';
 import { Column } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import 'antd/dist/antd.css';
-import { Button, Form, Input } from 'antd';
+import { Alert, Button, Form, Input } from 'antd';
 import { IconLogo } from '../../assets/icons';
 import { signin } from '../../redux/actions/userActions';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -31,6 +32,10 @@ function LoginComponent() {
     const onFinish = (values) => {
         dispatch(signin(values.username, values.password));
     };
+
+    const userLogIn = useSelector((state) => state.userSignin);
+    const { loading, error } = userLogIn;
+    console.log(userLogIn);
     
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -51,6 +56,8 @@ function LoginComponent() {
                     onFinishFailed={onFinishFailed}
                     requiredMark={false}
                     >
+                    {loading && <LoadingComponent loading={loading} />}
+                    {error && <Alert message="Неправильный логин или пароль" type="error" showIcon closable />}
                     <Form.Item
                         label="Логин"
                         name="username"

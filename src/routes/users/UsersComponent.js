@@ -89,12 +89,14 @@ function UsersComponent() {
                 <Table
                     className={classes.table}
                     pagination={{
-                        total: 10,
+                        total: allUsersData && allUsersData.length,
                         showTotal: total => `Всего ${total} пользователей`,
                         size: 'small',
+                        pageSize: 3,
                         defaultCurrent: 1}}
                     columns={columns}
-                    dataSource={allUsersData && allUsersData.content} />
+                    rowKey="id"
+                    dataSource={allUsersData} />
             </Row>
         </Column>
     );

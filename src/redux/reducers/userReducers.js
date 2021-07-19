@@ -22,7 +22,7 @@ export const getAllUsersReducer = (state = {}, action) => {
       case GET_USERS_SUCCESS:
           return {
               loadingAllUsers: false,
-              allUsersData: action.payload
+              allUsersData: action.payload.content
            };
       case GET_USERS_FAIL:
           return { loadingAllUsers: false, errorAllUsers: action.payload };

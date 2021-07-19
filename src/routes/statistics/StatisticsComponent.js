@@ -74,6 +74,7 @@ function StatisticsComponent() {
 
   const allStatistics = useSelector((state) => state.allStatistics);
   const { errorStatistics, statistics } = allStatistics;
+  console.log(allStatistics);
 
   const theme = useTheme();
   const classes = useStyles({ theme });
@@ -82,9 +83,10 @@ function StatisticsComponent() {
   useEffect(() => {
     if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
       dispatch(signout());
+    } else if(!errorStatistics || !statistics) {
+      dispatch(getStatistics());
     }
-    dispatch(getStatistics());
-  }, [dispatch, errorStatistics]);
+  }, [dispatch, errorStatistics, statistics]);
 
     return (
         <Column
