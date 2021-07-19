@@ -64,7 +64,7 @@ function LoginComponent() {
                         rules={[
                         {
                             required: true,
-                            message: 'Пожалуйста, введите ваше имя пользователя!',
+                            message: 'Пожалуйста, введите ваше логин',
                         },
                         ]}
                     >
@@ -77,7 +77,7 @@ function LoginComponent() {
                         rules={[
                         {
                             required: true,
-                            message: 'Пожалуйста, введите свой пароль!',
+                            message: 'Пожалуйста, введите свой пароль',
                         },
                         ]}
                     >
