@@ -76,7 +76,7 @@ const columns = [
 
   const { Option } = Select;
 
-function ProductsComponent() {
+function ActivitiesComponent() {
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
@@ -153,4 +153,4 @@ function ProductsComponent() {
     );
 }
 
-export default ProductsComponent;
+export default ActivitiesComponent;

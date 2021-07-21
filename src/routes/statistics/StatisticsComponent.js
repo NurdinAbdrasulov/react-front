@@ -1,10 +1,10 @@
-import { Row } from 'antd';
+import { Alert, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { createUseStyles, useTheme } from 'react-jss';
 import { useDispatch, useSelector } from 'react-redux';
 import { Column } from 'simple-flexbox';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getStatistics } from '../../redux/actions/statisticsActions';
-import { signout } from '../../redux/actions/userActions';
 import PieChart from './PieChart';
 
   const useStyles = createUseStyles((theme) => ({
@@ -73,7 +73,7 @@ import PieChart from './PieChart';
 function StatisticsComponent() {
 
   const allStatistics = useSelector((state) => state.allStatistics);
-  const { errorStatistics, statistics } = allStatistics;
+  const { errorStatistics, statistics, loadingStatistics } = allStatistics;
   console.log(allStatistics);
 
   const theme = useTheme();
@@ -81,31 +81,38 @@ function StatisticsComponent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
-      dispatch(signout());
-    } else if(!errorStatistics || !statistics) {
-      dispatch(getStatistics());
-    }
-  }, [dispatch, errorStatistics, statistics]);
+    // if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
+    //   dispatch(signout());
+    // }
+    dispatch(getStatistics());
+  }, [dispatch]);
 
     return (
         <Column
           horizontal='center'
           className={classes.container}>
-            <Row className={classes.row}>
+            {loadingStatistics ? (
+              <LoadingComponent loading={loadingStatistics} />
+            ) : errorStatistics ? (
+              <Alert message="Error" description={errorStatistics} type="error" showIcon />
+            ) : (
+              <>
+                <Row className={classes.row}>
+                    <div className={classes.rowBlock}>
+                      <span className={classes.statsBlockTitle}>Пол</span>
+                      <PieChart data={converter(statistics && statistics[2].data)} />
+                    </div>
+                    <div className={classes.rowBlock}>
+                      <span className={classes.statsBlockTitle}>Диабет</span>
+                      <PieChart data={converter(statistics && statistics[1].data)} />
+                    </div>
+                </Row>
                 <div className={classes.rowBlock}>
-                  <span className={classes.statsBlockTitle}>Пол</span>
-                  <PieChart data={converter(statistics && statistics[2].data)} />
+                  <span className={classes.statsBlockTitle}>Возраст</span>
+                  <PieChart data={converter(statistics && statistics[0].data)} />
                 </div>
-                <div className={classes.rowBlock}>
-                  <span className={classes.statsBlockTitle}>Диабет</span>
-                  <PieChart data={converter(statistics && statistics[1].data)} />
-                </div>
-            </Row>
-            <div className={classes.rowBlock}>
-              <span className={classes.statsBlockTitle}>Возраст</span>
-              <PieChart data={converter(statistics && statistics[0].data)} />
-            </div>
+              </>
+            )}
         </Column>
     );
 }

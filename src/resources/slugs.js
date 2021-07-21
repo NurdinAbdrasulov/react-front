@@ -3,7 +3,7 @@ const SLUGS = {
     statistics: '/statistics',
     users: '/users',
     products: '/products',
-    editProduct: '/products/editProduct',
+    editProduct: '/products/editProduct/:id',
     createProduct: '/products/createProduct',
     activity: '/activity',
     // auth
