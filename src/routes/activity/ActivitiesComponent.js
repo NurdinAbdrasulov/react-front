@@ -4,11 +4,11 @@ import { createUseStyles, useTheme } from 'react-jss';
 import SLUGS from '../../resources/slugs';
 import { Link, useHistory } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Alert, Button, Select, Table } from 'antd';
+import { Alert, Button, Table } from 'antd';
 import { IconAdd } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllFoods } from '../../redux/actions/foodActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import { getAllActivities } from '../../redux/actions/activityActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -19,7 +19,7 @@ const useStyles = createUseStyles((theme) => ({
       marginTop: 30
     },
     button: {
-      width: 192,
+      width: 218,
       display: 'flex',
       justifyContent: 'space-around',
       alignItems: 'center'
@@ -37,44 +37,25 @@ const useStyles = createUseStyles((theme) => ({
 
 const columns = [
     {
-        title: 'Название',
-        dataIndex: 'name',
-        key: 'name',
-        width: 567
+      title: 'Иконка',
+      dataIndex: 'icon',
+      key: 'icon',
+      width: 222,
+      render: (activityImage) => <img src={activityImage} alt="activity icon" />
     },
     {
-        title: 'Ккал',
-        dataIndex: 'calories',
-        key: 'calories',
-        width: 222
-    },
-    {
-        title: 'Белки',
-        dataIndex: 'proteins',
-        key: 'protein',
-        width: 105
-    },
-    {
-        title: 'Жиры',
-        dataIndex: 'fats',
-        key: 'fats',
-        width: 105
-      },
-    {
-        title: 'Углеводы',
-        key: 'carbohydrates',
-        dataIndex: 'carbohydrates',
-        width: 105
+      title: 'Название',
+      dataIndex: 'name',
+      key: 'name',
+      width: 567
     },
     {
       title: '',
       key: 'x',
       dataIndex: '',
-      render: (record) => <Link to={`/products/editProduct/${record.id}`}>Изменить</Link>
+      render: (record) => <Link to={`/activity/editActivity/${record.id}`}>Изменить</Link>
     }
   ];
-
-  const { Option } = Select;
 
 function ActivitiesComponent() {
   const { push } = useHistory();
@@ -82,52 +63,36 @@ function ActivitiesComponent() {
   const classes = useStyles({ theme });
   const dispatch = useDispatch();
 
-  const allFoods = useSelector((state) => state.allFoods);
-  const { errorAllFoods, allFoodsData, loadingAllFoods } = allFoods;
+  const allActivities = useSelector((state) => state.allActivities);
+  const { errorAllActivities, allActivitiesData, loadingAllActivities } = allActivities;
 
   useEffect(() => {
     // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
     //   dispatch(signout());
     // }
-    dispatch(getAllFoods());
+    dispatch(getAllActivities());
   }, [dispatch]);
-
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
 
     return (
         <Column className={classes.container}>
-          {loadingAllFoods ? (
-              <LoadingComponent loading={loadingAllFoods} />
-            ) : errorAllFoods ? (
-              <Alert message="Error" description={errorAllFoods} type="error" showIcon />
+          {loadingAllActivities ? (
+              <LoadingComponent loading={loadingAllActivities} />
+            ) : errorAllActivities ? (
+              <Alert message="Error" description={errorAllActivities} type="error" showIcon />
             ) : (
             <>
               <Row
-                  horizontal='space-between'
+                  horizontal='flex-end'
                   className={classes.lastRow}
                   breakpoints={{ 1024: 'column' }}
               >
-                <Select
-                  placeholder="Выберите категорию"
-                  className={classes.select}
-                  size='large'
-                  onChange={handleChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Yiminghe">yiminghe</Option>
-                </Select>
                 <Button
                   className={classes.button}
                   type='primary'
                   size='large'
-                  onClick={() => push(SLUGS.createProduct)}
+                  onClick={() => push(SLUGS.createActivity)}
                   icon={<IconAdd />}>
-                    Добавить продукт
+                    Добавить активность
                 </Button>
               </Row>
               <Row
@@ -138,14 +103,14 @@ function ActivitiesComponent() {
                   <Table
                       className={classes.table}
                       pagination={{
-                          total: allFoodsData && allFoodsData.length,
-                          showTotal: total => `Всего ${total} продуктов`,
+                          total: allActivitiesData && allActivitiesData.length,
+                          showTotal: total => `Всего ${total} активностей`,
                           size: 'small',
                           pageSize: 3,
                           defaultCurrent: 1}}
                       columns={columns}
                       rowKey="id"
-                      dataSource={allFoodsData} />
+                      dataSource={allActivitiesData} />
               </Row>
             </>
             )}

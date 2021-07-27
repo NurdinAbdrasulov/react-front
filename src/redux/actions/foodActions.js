@@ -9,7 +9,7 @@ export const getAllFoods = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/food/getAll', {
+      const { data } = await Axios.get('http://167.172.167.145:9090/food', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }

@@ -43,7 +43,7 @@ function HeaderComponent() {
         case currentItem === SLUGS.products:
             title = 'Список продуктов';
             break;
-        case currentItem === SLUGS.editProduct:
+        case currentItem.includes((SLUGS.editProduct).substr(0, SLUGS.editProduct.length-3)):
             title = 'Редактировать продукт';
             break;
         case currentItem === SLUGS.createProduct:
@@ -51,6 +51,12 @@ function HeaderComponent() {
             break;
         case currentItem === SLUGS.activity:
             title = 'Список активностей';
+            break;
+        case currentItem.includes((SLUGS.editActivity).substr(0, SLUGS.editActivity.length-3)):
+            title = 'Редактировать активность';
+            break;
+        case currentItem === SLUGS.createActivity:
+            title = 'Создать активность';
             break;
         default:
             title = '';

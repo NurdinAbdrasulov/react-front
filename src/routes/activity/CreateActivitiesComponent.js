@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Column } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import 'antd/dist/antd.css';
-import { Button, Input, Form } from 'antd';
+import { Button, Input, Form, Upload } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import Modal from 'antd/lib/modal/Modal';
+import { createActivity } from '../../redux/actions/activityActions';
+import { useDispatch } from 'react-redux';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -25,18 +29,68 @@ const useStyles = createUseStyles((theme) => ({
     }
 }));
 
+function getBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
+}
+
 function CreateActivitiesComponent() {
     const theme = useTheme();
     const classes = useStyles({ theme });
+    const dispatch = useDispatch();
 
-    const onFinish = (values) => {
-        console.log(values);
-        // dispatch(createProduct(values.username, values.password));
+    const [fileList, setFileList] = useState([]);
+    const [previewVisible, setPreviewVisible] = useState(false);
+    const [previewImage, setPreviewImage] = useState('');
+    const [previewTitle, setPreviewTitle] = useState('');
+
+    const onFinish = async(values) => {
+        let formData = new FormData();
+        formData.append("icon", fileList[0].originFileObj);
+        formData.append("name", values.name);
+        dispatch(createActivity(formData));
     };
-    
+
+    const handlePreview = async file => {
+        if (!file.url && !file.preview) {
+          file.preview = await getBase64(file.originFileObj);
+        }
+        setPreviewImage(file.url || file.preview);
+        setPreviewVisible(true);
+        setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
+    };
+
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
+    
+    const handleChange = ({ fileList }) => setFileList(fileList);
+
+    const handleCancel = () => setPreviewVisible(false);
+
+    const dummyRequest = ({ file, onSuccess }) => {
+        setTimeout(() => {
+          onSuccess("ok");
+        }, 0);
+    };
+
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+          return e;
+        }
+        return e && e.fileList;
+    };
+
+    const uploadButton = (
+        <div>
+          <PlusOutlined />
+          <div style={{ marginTop: 8 }}>Upload</div>
+        </div>
+    );
 
     return (
         <Column className={classes.container}>
@@ -53,7 +107,7 @@ function CreateActivitiesComponent() {
                         rules={[
                         {
                             required: true,
-                            message: 'Пожалуйста заполните все поля!',
+                            message: 'Пожалуйста, заполните поля!',
                         },
                         ]}
                     >
@@ -61,56 +115,34 @@ function CreateActivitiesComponent() {
                     </Form.Item>
 
                     <Form.Item
-                        label="Пищевая ценность"
-                        name="value"
+                        label="Upload"
+                        name="icon"
+                        valuePropName="fileList"
+                        getValueFromEvent={normFile}
                         rules={[
                         {
                             required: true,
-                            message: 'Пожалуйста заполните все поля!',
-                        },
-                        ]}
+                            message: 'Пожалуйста, загрузите иконку!',
+                        }]}
                     >
-                        <Input size="large" placeholder="ккал" />
+                        <Upload
+                            name="avatar"
+                            listType="picture-card"
+                            onPreview={handlePreview}
+                            onChange={handleChange}
+                            customRequest={dummyRequest}
+                        >{fileList.length >= 1 ? null : uploadButton}
+                        </Upload>
                     </Form.Item>
 
-                    <Form.Item
-                        label="Белки"
-                        name="proteins"
-                        rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста заполните все поля!',
-                        },
-                        ]}
-                    >
-                        <Input size="large" placeholder="грамм" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Жиры"
-                        name="fats"
-                        rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста заполните все поля!',
-                        },
-                        ]}
-                    >
-                        <Input size="large" placeholder="грамм" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Углеводы"
-                        name="carbohydrates"
-                        rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста заполните все поля!',
-                        },
-                        ]}
-                    >
-                        <Input size="large" placeholder="грамм" />
-                    </Form.Item>
+                    <Modal
+                        visible={previewVisible}
+                        title={previewTitle}
+                        footer={null}
+                        onCancel={handleCancel}
+                        >
+                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                    </Modal>
 
                     <Form.Item style={{ paddingTop: 32}}>
                         <Button type="primary" size="large" htmlType="submit" block>
