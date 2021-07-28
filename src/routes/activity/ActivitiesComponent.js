@@ -47,11 +47,12 @@ const columns = [
       title: 'Название',
       dataIndex: 'name',
       key: 'name',
-      width: 567
+      width: 683
     },
     {
       title: '',
       key: 'x',
+      width: 125,
       dataIndex: '',
       render: (record) => <Link to={`/activity/editActivity/${record.id}`}>Изменить</Link>
     }
@@ -74,13 +75,13 @@ function ActivitiesComponent() {
   }, [dispatch]);
 
     return (
-        <Column className={classes.container}>
+        <>
           {loadingAllActivities ? (
               <LoadingComponent loading={loadingAllActivities} />
             ) : errorAllActivities ? (
               <Alert message="Error" description={errorAllActivities} type="error" showIcon />
             ) : (
-            <>
+            <Column className={classes.container}>
               <Row
                   horizontal='flex-end'
                   className={classes.lastRow}
@@ -112,9 +113,9 @@ function ActivitiesComponent() {
                       rowKey="id"
                       dataSource={allActivitiesData} />
               </Row>
-            </>
+            </Column>
             )}
-        </Column>
+        </>
     );
 }
 

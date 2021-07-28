@@ -2,17 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Column, Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import 'antd/dist/antd.css';
-import { Button, Input, Form, Upload, Alert } from 'antd';
+import { Button, Input, Form, Upload, Alert, notification, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import Modal from 'antd/lib/modal/Modal';
-import { createActivity, getActivity } from '../../redux/actions/activityActions';
+import { deleteActivity, getActivity, updateActivity } from '../../redux/actions/activityActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { IconAdd } from '../../assets/icons';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import LoadingComponent from '../../components/loading';
+import { DELETE_ACTIVITY_RESET, UPDATE_ACTIVITY_RESET } from '../../redux/constants/activityConstants';
+import { useHistory } from 'react-router-dom';
+import SLUGS from '../../resources/slugs';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
-      width: 300,
+    //   width: 300,
     },
     lastRow: {
       marginTop: 30
@@ -44,6 +46,7 @@ function EditActivitiesComponent(props) {
     const activityId = props.match.params.id;
     const theme = useTheme();
     const classes = useStyles({ theme });
+    const { push } = useHistory();
     const dispatch = useDispatch();
 
     const [fileList, setFileList] = useState([]);
@@ -56,7 +59,7 @@ function EditActivitiesComponent(props) {
         formData.append("icon", fileList[0].originFileObj);
         formData.append("name", values.name);
         formData.append("id", activityId);
-        dispatch(createActivity(formData, activityId));
+        dispatch(updateActivity(formData, activityId));
     };
 
     const handlePreview = async file => {
@@ -66,10 +69,6 @@ function EditActivitiesComponent(props) {
         setPreviewImage(file.url || file.preview);
         setPreviewVisible(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
     };
     
     const handleChange = ({ fileList }) => setFileList(fileList);
@@ -81,6 +80,19 @@ function EditActivitiesComponent(props) {
           onSuccess("ok");
         }, 0);
     };
+
+    const showDeleteConfirm = (activityData) => {
+        Modal.confirm({
+          title: `Вы уверены, что хотите удалить ${activityData.name}?`,
+          icon: <ExclamationCircleOutlined />,
+          okText: 'Да',
+          okType: 'primary',
+          cancelText: 'Нет',
+          onOk() {
+            dispatch(deleteActivity(activityData.id));
+          }
+        });
+    }
 
     const normFile = (e) => {
         if (Array.isArray(e)) {
@@ -98,42 +110,84 @@ function EditActivitiesComponent(props) {
 
     const activity = useSelector((state) => state.activity);
     const { errorActivity, activityData, loadingActivity } = activity;
+    const updatedActivity = useSelector((state) => state.updatedActivity);
+    const { errorUpdatedActivity, updatedActivityData, loadingUpdateActivity } = updatedActivity;
+    const deletedActivity = useSelector((state) => state.deletedActivity);
+    const { errorDeletedActivity, deletedActivityData, loadingDeleteActivity } = deletedActivity;
 
-    console.log(activityData);
-    console.log(fileList)
+    console.log(fileList);
 
     useEffect(() => {
         // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
         //   dispatch(signout());
         // }
+        if(deletedActivityData) {
+            notification['success']({
+                message: 'Успешно удален!',
+            });
+            push(SLUGS.activity);
+            dispatch({ type: DELETE_ACTIVITY_RESET });
+        }
+        if(errorDeletedActivity) {
+            notification['error']({
+                message: errorDeletedActivity
+            });
+            dispatch({ type: DELETE_ACTIVITY_RESET });
+        }
+        if(updatedActivityData) {
+            dispatch(getActivity(activityId));
+            notification['success']({
+                message: 'Успешно изменен!',
+            });
+            dispatch({ type: UPDATE_ACTIVITY_RESET });
+        }
+        if(errorUpdatedActivity) {
+            notification['error']({
+                message: errorUpdatedActivity
+            });
+            dispatch({ type: UPDATE_ACTIVITY_RESET });
+        }
         if(activityData) {
-            let oneActivity = [{
+            setFileList([{
                 uid: activityData.id,
                 name: activityData.name,
                 status: 'done',
-                url: activityData.icon
-            }];
-            setFileList(oneActivity);
-        } else {
-            dispatch(getActivity(activityId));
+                url: "http://" + activityData.icon
+            }])
         }
-      }, [dispatch, activityId, activityData]);
+      }, [dispatch, activityId, activityData, deletedActivityData, updatedActivityData, errorDeletedActivity, errorUpdatedActivity, push]);
+
+      useEffect(() => {
+        // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
+        //   dispatch(signout());
+        // }
+        dispatch(getActivity(activityId));
+      }, [dispatch, activityId]);
 
     return (
-        <Column className={classes.container}>
-            {loadingActivity ? (
+        <>
+            {loadingActivity || loadingDeleteActivity || loadingUpdateActivity ? (
               <LoadingComponent loading={loadingActivity} />
             ) : errorActivity ? (
               <Alert message="Error" description={errorActivity} type="error" showIcon />
-            ) : (
-                <Row horizontal='space-around'>
+            ) : activityData ? (
+            <Column className={classes.container}>
+                <Row horizontal='space-between'>
                     <Form
+                        initialValues={{
+                            name: activityData.name,
+                            icon: [{
+                                uid: activityData.id,
+                                name: activityData.name,
+                                status: 'done',
+                                url: "http://" + activityData.icon
+                            }]
+                        }}
                         name="basic"
-                        width="300px"
                         layout="vertical"
                         onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
                         requiredMark={false}
+                        style={{ width: "300px" }}
                         >
                             <Form.Item
                                 label="Название"
@@ -162,11 +216,11 @@ function EditActivitiesComponent(props) {
                                 <Upload
                                     name="avatar"
                                     listType="picture-card"
-                                    defaultFileList={[...fileList]}
                                     onPreview={handlePreview}
+                                    maxCount={1}
                                     onChange={handleChange}
                                     customRequest={dummyRequest}
-                                >{fileList.length >= 5 ? null : uploadButton}
+                                >{fileList.length >= 1 ? null : uploadButton}
                                 </Upload>
                             </Form.Item>
 
@@ -187,15 +241,16 @@ function EditActivitiesComponent(props) {
                     </Form>
                     <Button
                         className={classes.button}
-                        type='primary'
                         size='large'
-                        onClick={() => alert("Hi")}
-                        icon={<IconAdd />}>
-                            Добавить активность
+                        onClick={() => showDeleteConfirm(activityData)}
+                        danger
+                        ghost>
+                            Удалить продукт
                     </Button>
                 </Row>
-                )}
-        </Column>
+            </Column>
+            ) : ""}
+        </>
     );
 }
 

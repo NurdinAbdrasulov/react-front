@@ -225,16 +225,14 @@ function EditProductsComponent(props) {
                                 </Button>
                             </Form.Item>
                         </Form>
-                        <>
-                            <Button
-                                className={classes.button}
-                                size='large'
-                                onClick={() => showDeleteConfirm(foodData)}
-                                danger
-                                ghost>
-                                    Удалить продукт
-                            </Button>
-                        </>
+                        <Button
+                            className={classes.button}
+                            size='large'
+                            onClick={() => showDeleteConfirm(foodData)}
+                            danger
+                            ghost>
+                                Удалить продукт
+                        </Button>
                     </Row>
             ) : ""}
         </Column>

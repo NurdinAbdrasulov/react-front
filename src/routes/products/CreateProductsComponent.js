@@ -78,12 +78,13 @@ function CreateProductsComponent() {
     }, [dispatch]);
 
     return (
-        <Column className={classes.container}>
+        <>
             {loadingAllCategories || loadingCreateFood ? (
                 <LoadingComponent loading />
             ) : errorAllCategories ? (
                 <Alert message="Ошибка" description={errorAllCategories} type="error" showIcon />
             ) : allCategoriesData ? (
+            <Column className={classes.container}>
                 <Form
                     name="basic"
                     layout="vertical"
@@ -179,8 +180,9 @@ function CreateProductsComponent() {
                             </Button>
                         </Form.Item>
                     </Form>
+                </Column>
             ) : ""}
-        </Column>
+        </>
     );
 }
 

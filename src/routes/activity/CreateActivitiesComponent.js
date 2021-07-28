@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Column } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import 'antd/dist/antd.css';
-import { Button, Input, Form, Upload } from 'antd';
+import { Button, Input, Form, Upload, notification } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import Modal from 'antd/lib/modal/Modal';
 import { createActivity } from '../../redux/actions/activityActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingComponent from '../../components/loading/LoadingComponent';
+import { CREATE_ACTIVITY_RESET } from '../../redux/constants/activityConstants';
+import SLUGS from '../../resources/slugs';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -41,12 +45,16 @@ function getBase64(file) {
 function CreateActivitiesComponent() {
     const theme = useTheme();
     const classes = useStyles({ theme });
+    const { push } = useHistory();
     const dispatch = useDispatch();
 
     const [fileList, setFileList] = useState([]);
     const [previewVisible, setPreviewVisible] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
+
+    const createdActivity = useSelector((state) => state.createdActivity);
+    const { errorCreatedActivity, createdActivityData, loadingCreateActivty } = createdActivity;
 
     const onFinish = async(values) => {
         let formData = new FormData();
@@ -92,65 +100,90 @@ function CreateActivitiesComponent() {
         </div>
     );
 
+    useEffect(() => {
+        // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
+        //   dispatch(signout());
+        // }
+        if(createdActivityData) {
+            notification['success']({
+                message: 'Успешно добавлен!',
+            });
+            push(SLUGS.activity);
+            dispatch({ type: CREATE_ACTIVITY_RESET });
+        }
+        if(errorCreatedActivity) {
+            notification['error']({
+                message: errorCreatedActivity
+            });
+            dispatch({ type: CREATE_ACTIVITY_RESET });
+        }
+    }, [dispatch, createdActivityData, push, errorCreatedActivity]);
+
     return (
-        <Column className={classes.container}>
-            <Form
-                name="basic"
-                layout="vertical"
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                requiredMark={false}
-                >
-                    <Form.Item
-                        label="Название"
-                        name="name"
-                        rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста, заполните поля!',
-                        },
-                        ]}
-                    >
-                        <Input size="large" placeholder="Введите название" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label="Upload"
-                        name="icon"
-                        valuePropName="fileList"
-                        getValueFromEvent={normFile}
-                        rules={[
-                        {
-                            required: true,
-                            message: 'Пожалуйста, загрузите иконку!',
-                        }]}
-                    >
-                        <Upload
-                            name="avatar"
-                            listType="picture-card"
-                            onPreview={handlePreview}
-                            onChange={handleChange}
-                            customRequest={dummyRequest}
-                        >{fileList.length >= 1 ? null : uploadButton}
-                        </Upload>
-                    </Form.Item>
-
-                    <Modal
-                        visible={previewVisible}
-                        title={previewTitle}
-                        footer={null}
-                        onCancel={handleCancel}
+        <>
+            {loadingCreateActivty ? (
+                <LoadingComponent loading />
+            ) : (
+                <Column className={classes.container}>
+                    <Form
+                        name="basic"
+                        layout="vertical"
+                        onFinish={onFinish}
+                        onFinishFailed={onFinishFailed}
+                        requiredMark={false}
                         >
-                            <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                    </Modal>
+                            <Form.Item
+                                label="Название"
+                                name="name"
+                                rules={[
+                                {
+                                    required: true,
+                                    message: 'Пожалуйста, заполните поля!',
+                                },
+                                ]}
+                            >
+                                <Input size="large" placeholder="Введите название" />
+                            </Form.Item>
 
-                    <Form.Item style={{ paddingTop: 32}}>
-                        <Button type="primary" size="large" htmlType="submit" block>
-                            Сохранить
-                        </Button>
-                    </Form.Item>
-                </Form>
-        </Column>
+                            <Form.Item
+                                label="Upload"
+                                name="icon"
+                                valuePropName="fileList"
+                                getValueFromEvent={normFile}
+                                rules={[
+                                {
+                                    required: true,
+                                    message: 'Пожалуйста, загрузите иконку!',
+                                }]}
+                            >
+                                <Upload
+                                    name="avatar"
+                                    listType="picture-card"
+                                    onPreview={handlePreview}
+                                    onChange={handleChange}
+                                    customRequest={dummyRequest}
+                                >{fileList.length >= 1 ? null : uploadButton}
+                                </Upload>
+                            </Form.Item>
+
+                            <Modal
+                                visible={previewVisible}
+                                title={previewTitle}
+                                footer={null}
+                                onCancel={handleCancel}
+                                >
+                                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                            </Modal>
+
+                            <Form.Item style={{ paddingTop: 32}}>
+                                <Button type="primary" size="large" htmlType="submit" block>
+                                    Сохранить
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                </Column>
+            )}
+        </>
     );
 }
 
