@@ -4,10 +4,9 @@ import { createUseStyles, useTheme } from 'react-jss';
 import SLUGS from '../../resources/slugs';
 import { Link, useHistory } from 'react-router-dom';
 import 'antd/dist/antd.css';
-import { Alert, Button, Select, Table } from 'antd';
+import { Alert, Button, Table } from 'antd';
 import { IconAdd } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllFoods } from '../../redux/actions/foodActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getAllCategories } from '../../redux/actions/categoryActions';
 
@@ -41,48 +40,22 @@ const columns = [
         title: 'Название',
         dataIndex: 'name',
         key: 'name',
-        width: 567
-    },
-    {
-        title: 'Ккал',
-        dataIndex: 'calories',
-        key: 'calories',
-        width: 222
-    },
-    {
-        title: 'Белки',
-        dataIndex: 'proteins',
-        key: 'protein',
-        width: 105
-    },
-    {
-        title: 'Жиры',
-        dataIndex: 'fats',
-        key: 'fats',
-        width: 105
-      },
-    {
-        title: 'Углеводы',
-        key: 'carbohydrates',
-        dataIndex: 'carbohydrates',
-        width: 105
+        width: 970
     },
     {
       title: '',
       key: 'x',
       dataIndex: '',
-      render: (record) => <Link to={`/products/editProduct/${record.id}`}>Изменить</Link>
+      render: (record) => <Link to={`/categoryProducts/editСategoryProduct/${record.id}`}>Изменить</Link>
     }
   ];
 
-function ProductsComponent() {
+function CategoryProductsComponent() {
   const { push } = useHistory();
   const theme = useTheme();
   const classes = useStyles({ theme });
   const dispatch = useDispatch();
 
-  const allFoods = useSelector((state) => state.allFoods);
-  const { errorAllFoods, allFoodsData, loadingAllFoods } = allFoods;
   const allCategories = useSelector((state) => state.allCategories);
   const { errorAllCategories, allCategoriesData, loadingAllCategories } = allCategories;
 
@@ -90,37 +63,27 @@ function ProductsComponent() {
     // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
     //   dispatch(signout());
     // }
-    dispatch(getAllFoods());
     dispatch(getAllCategories());
   }, [dispatch]);
 
-  function handleChange(value) {
-    console.log(`selected ${value}`);
-  }
-
     return (
-        <Column className={classes.container}>
-          {loadingAllFoods || loadingAllCategories ? (
-              <LoadingComponent loading />
-            ) : errorAllFoods || errorAllCategories ? (
-              <Alert message="Ошибка" description={errorAllFoods ? errorAllFoods : errorAllCategories} type="error" showIcon />
+        <>
+          {loadingAllCategories ? (
+              <LoadingComponent loading={loadingAllCategories} />
+            ) : errorAllCategories ? (
+              <Alert message="Ошибка" description={errorAllCategories} type="error" showIcon />
             ) : (
-            <>
+            <Column className={classes.container}>
               <Row
-                  horizontal='space-between'
+                  horizontal='flex-end'
                   className={classes.lastRow}
                   breakpoints={{ 1024: 'column' }}
               >
-                <Select onChange={handleChange} placeholder="Выберите категорию" style={{ width: "260px" }}>
-                  {allCategoriesData.map(({id, name}) => {
-                    return <Select.Option key={id} value={id}>{name}</Select.Option>
-                  })}
-                </Select>
                 <Button
                   className={classes.button}
                   type='primary'
                   size='large'
-                  onClick={() => push(SLUGS.createProduct)}
+                  onClick={() => push(SLUGS.createСategoryProducts)}
                   icon={<IconAdd />}>
                     Добавить продукт
                 </Button>
@@ -133,19 +96,19 @@ function ProductsComponent() {
                   <Table
                       className={classes.table}
                       pagination={{
-                          total: allFoodsData && allFoodsData.length,
+                          total: allCategoriesData && allCategoriesData.length,
                           showTotal: total => `Всего ${total} продуктов`,
                           size: 'small',
                           pageSize: 6,
                           defaultCurrent: 1}}
                       columns={columns}
                       rowKey="id"
-                      dataSource={allFoodsData} />
+                      dataSource={allCategoriesData} />
               </Row>
-            </>
+            </Column>
             )}
-        </Column>
+          </>
     );
 }
 
-export default ProductsComponent;
+export default CategoryProductsComponent;

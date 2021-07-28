@@ -49,6 +49,15 @@ function HeaderComponent() {
         case currentItem === SLUGS.createProduct:
             title = 'Создать продукт';
             break;
+        case currentItem === SLUGS.categoryProducts:
+            title = 'Список категорий продуктов';
+            break;
+        case currentItem.includes((SLUGS.editСategoryProducts).substr(0, SLUGS.editСategoryProducts.length-3)):
+            title = 'Редактировать категорию';
+            break;
+        case currentItem === SLUGS.createСategoryProducts:
+            title = 'Создать категорию';
+            break;
         case currentItem === SLUGS.activity:
             title = 'Список активностей';
             break;

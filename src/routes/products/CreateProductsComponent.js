@@ -80,9 +80,9 @@ function CreateProductsComponent() {
     return (
         <Column className={classes.container}>
             {loadingAllCategories || loadingCreateFood ? (
-                <LoadingComponent loading={loadingAllCategories} />
+                <LoadingComponent loading />
             ) : errorAllCategories ? (
-                <Alert message="Error" description={errorAllCategories} type="error" showIcon />
+                <Alert message="Ошибка" description={errorAllCategories} type="error" showIcon />
             ) : allCategoriesData ? (
                 <Form
                     name="basic"

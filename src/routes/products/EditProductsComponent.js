@@ -116,9 +116,9 @@ function EditProductsComponent(props) {
     return (
         <Column className={classes.container}>
             {loadingFood || loadingAllCategories || loadingUpdateFood || loadingDeleteFood ? (
-                <LoadingComponent loading={loadingFood} />
+                <LoadingComponent loading />
             ) : errorFood || errorAllCategories ? (
-                <Alert message="Error" description={errorFood} type="error" showIcon />
+                <Alert message="Ошибка" description={errorFood} type="error" showIcon />
             ) : foodData && allCategoriesData ? (
                 <Row horizontal='space-between'>
                     <Form

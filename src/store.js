@@ -1,7 +1,7 @@
 import { createStore, compose, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
 import { getActivityReducer, getAllActivitiesReducer } from './redux/reducers/activityReducers';
-import { getAllCategoriesReducer } from './redux/reducers/categoryReducers';
+import { createCategoryFoodReducer, deleteCategoryFoodReducer, getAllCategoriesReducer, getCategoryFoodReducer, updateCategoryFoodReducer } from './redux/reducers/categoryReducers';
 import { createFoodReducer, deleteFoodReducer, getAllFoodsReducer, getFoodReducer, updateFoodReducer } from './redux/reducers/foodReducers';
 import { getStatisticsReducer } from './redux/reducers/statisticsReducers';
 import { getAllUsersReducer, userSigninReducer } from './redux/reducers/userReducers';
@@ -21,10 +21,14 @@ const reducer = combineReducers({
   allActivities: getAllActivitiesReducer,
   activity: getActivityReducer,
   food: getFoodReducer,
-  allCategories: getAllCategoriesReducer,
   updatedFood: updateFoodReducer,
   deletedFood: deleteFoodReducer,
-  createdFood: createFoodReducer
+  createdFood: createFoodReducer,
+  allCategories: getAllCategoriesReducer,
+  categoryFood: getCategoryFoodReducer,
+  updatedCategoryFood: updateCategoryFoodReducer,
+  deletedCategoryFood: deleteCategoryFoodReducer,
+  createdCategoryFood: createCategoryFoodReducer,
 });
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
