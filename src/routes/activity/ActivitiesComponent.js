@@ -76,45 +76,45 @@ function ActivitiesComponent() {
 
     return (
         <>
-          {loadingAllActivities ? (
-              <LoadingComponent loading={loadingAllActivities} />
-            ) : errorAllActivities ? (
-              <Alert message="Error" description={errorAllActivities} type="error" showIcon />
-            ) : (
-            <Column className={classes.container}>
-              <Row
-                  horizontal='flex-end'
-                  className={classes.lastRow}
-                  breakpoints={{ 1024: 'column' }}
-              >
-                <Button
-                  className={classes.button}
-                  type='primary'
-                  size='large'
-                  onClick={() => push(SLUGS.createActivity)}
-                  icon={<IconAdd />}>
-                    Добавить активность
-                </Button>
-              </Row>
-              <Row
-                  horizontal='space-between'
-                  className={classes.lastRow}
-                  breakpoints={{ 1024: 'column' }}
-              >
-                  <Table
-                      className={classes.table}
-                      pagination={{
-                          total: allActivitiesData && allActivitiesData.length,
-                          showTotal: total => `Всего ${total} активностей`,
-                          size: 'small',
-                          pageSize: 3,
-                          defaultCurrent: 1}}
-                      columns={columns}
-                      rowKey="id"
-                      dataSource={allActivitiesData} />
-              </Row>
-            </Column>
-            )}
+            {loadingAllActivities ? (
+                <LoadingComponent loading={loadingAllActivities} />
+                ) : errorAllActivities ? (
+                <Alert message="Error" description={errorAllActivities} type="error" showIcon />
+                ) : allActivitiesData ? (
+                <Column className={classes.container}>
+                    <Row
+                        horizontal='flex-end'
+                        className={classes.lastRow}
+                        breakpoints={{ 1024: 'column' }}
+                    >
+                    <Button
+                    className={classes.button}
+                    type='primary'
+                    size='large'
+                    onClick={() => push(SLUGS.createActivity)}
+                    icon={<IconAdd />}>
+                        Добавить активность
+                    </Button>
+                    </Row>
+                    <Row
+                        horizontal='space-between'
+                        className={classes.lastRow}
+                        breakpoints={{ 1024: 'column' }}
+                    >
+                        <Table
+                            className={classes.table}
+                            pagination={{
+                                total: allActivitiesData && allActivitiesData.length,
+                                showTotal: total => `Всего ${total} активностей`,
+                                size: 'small',
+                                pageSize: 3,
+                                defaultCurrent: 1}}
+                            columns={columns}
+                            rowKey="id"
+                            dataSource={allActivitiesData} />
+                    </Row>
+                </Column>
+            ): ""}
         </>
     );
 }

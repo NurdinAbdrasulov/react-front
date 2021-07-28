@@ -99,13 +99,13 @@ function ProductsComponent() {
   }
 
     return (
-        <Column className={classes.container}>
+        <>
           {loadingAllFoods || loadingAllCategories ? (
               <LoadingComponent loading />
             ) : errorAllFoods || errorAllCategories ? (
               <Alert message="Ошибка" description={errorAllFoods ? errorAllFoods : errorAllCategories} type="error" showIcon />
-            ) : (
-            <>
+            ) : allCategoriesData && allFoodsData ? (
+            <Column className={classes.container}>
               <Row
                   horizontal='space-between'
                   className={classes.lastRow}
@@ -142,9 +142,9 @@ function ProductsComponent() {
                       rowKey="id"
                       dataSource={allFoodsData} />
               </Row>
-            </>
-            )}
-        </Column>
+            </Column>
+            ) : ""}
+        </>
     );
 }
 

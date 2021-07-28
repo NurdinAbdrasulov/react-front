@@ -115,8 +115,6 @@ function EditActivitiesComponent(props) {
     const deletedActivity = useSelector((state) => state.deletedActivity);
     const { errorDeletedActivity, deletedActivityData, loadingDeleteActivity } = deletedActivity;
 
-    console.log(fileList);
-
     useEffect(() => {
         // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
         //   dispatch(signout());

@@ -62,7 +62,6 @@ export const updateActivity = (bodyFormData, activityId) => async (dispatch, get
           headers: { Authorization: `Bearer ${userInfo.jwt}` },
       }
     );
-    console.log(data);
     dispatch({
       type: UPDATE_ACTIVITY_SUCCESS,
       payload: data,
@@ -104,7 +103,6 @@ export const deleteActivity = (id) => async (dispatch, getState) => {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
       });
-      console.log(data);
       dispatch({ type: DELETE_ACTIVITY_SUCCESS, payload: data });
   } catch (error) {
       dispatch({ type: DELETE_ACTIVITY_FAIL, payload: error.message });

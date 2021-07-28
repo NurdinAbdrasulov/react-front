@@ -72,41 +72,41 @@ function CategoryProductsComponent() {
               <LoadingComponent loading={loadingAllCategories} />
             ) : errorAllCategories ? (
               <Alert message="Ошибка" description={errorAllCategories} type="error" showIcon />
-            ) : (
-            <Column className={classes.container}>
-              <Row
-                  horizontal='flex-end'
-                  className={classes.lastRow}
-                  breakpoints={{ 1024: 'column' }}
-              >
-                <Button
-                  className={classes.button}
-                  type='primary'
-                  size='large'
-                  onClick={() => push(SLUGS.createСategoryProducts)}
-                  icon={<IconAdd />}>
-                    Добавить продукт
-                </Button>
-              </Row>
-              <Row
-                  horizontal='space-between'
-                  className={classes.lastRow}
-                  breakpoints={{ 1024: 'column' }}
-              >
-                  <Table
-                      className={classes.table}
-                      pagination={{
-                          total: allCategoriesData && allCategoriesData.length,
-                          showTotal: total => `Всего ${total} продуктов`,
-                          size: 'small',
-                          pageSize: 6,
-                          defaultCurrent: 1}}
-                      columns={columns}
-                      rowKey="id"
-                      dataSource={allCategoriesData} />
-              </Row>
-            </Column>
-            )}
+            ) : allCategoriesData ? (
+              <Column className={classes.container}>
+                <Row
+                    horizontal='flex-end'
+                    className={classes.lastRow}
+                    breakpoints={{ 1024: 'column' }}
+                >
+                  <Button
+                    className={classes.button}
+                    type='primary'
+                    size='large'
+                    onClick={() => push(SLUGS.createСategoryProducts)}
+                    icon={<IconAdd />}>
+                      Добавить продукт
+                  </Button>
+                </Row>
+                <Row
+                    horizontal='space-between'
+                    className={classes.lastRow}
+                    breakpoints={{ 1024: 'column' }}
+                >
+                    <Table
+                        className={classes.table}
+                        pagination={{
+                            total: allCategoriesData && allCategoriesData.length,
+                            showTotal: total => `Всего ${total} продуктов`,
+                            size: 'small',
+                            pageSize: 6,
+                            defaultCurrent: 1}}
+                        columns={columns}
+                        rowKey="id"
+                        dataSource={allCategoriesData} />
+                </Row>
+              </Column>
+            ) : ""}
           </>
     );
 }
