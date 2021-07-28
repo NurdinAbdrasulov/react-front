@@ -8,6 +8,7 @@ import CreateProductsComponent from './products/CreateProductsComponent';
 import ActivitiesComponent from './activity/ActivitiesComponent';
 import CreateActivitiesComponent from './activity/CreateActivitiesComponent';
 import EditActivitiesComponent from './activity/EditActivitiesComponent';
+import EditProductsComponent from './products/EditProductsComponent';
 
 const StatisticsComponent = lazy(() => import('./statistics/StatisticsComponent'));
 
@@ -18,7 +19,7 @@ function PrivateRoutes() {
                 <Route exact path={SLUGS.statistics} component={StatisticsComponent} />
                 <Route exact path={SLUGS.users} component={UsersComponent} />
                 <Route exact path={SLUGS.products} component={ProductsComponent} />
-                <Route exact path={SLUGS.editProduct} render={() => <div>edit products</div>} />
+                <Route exact path={SLUGS.editProduct} component={EditProductsComponent} />
                 <Route exact path={SLUGS.createProduct} component={CreateProductsComponent} />
                 <Route exact path={SLUGS.categoryProducts} component={ProductsComponent} />
                 <Route exact path={SLUGS.editСategoryProducts} render={() => <div>edit category products</div>} />

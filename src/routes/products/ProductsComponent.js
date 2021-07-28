@@ -9,6 +9,7 @@ import { IconAdd } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllFoods } from '../../redux/actions/foodActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
+import { getAllCategories } from '../../redux/actions/categoryActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -74,8 +75,6 @@ const columns = [
     }
   ];
 
-  const { Option } = Select;
-
 function ProductsComponent() {
   const { push } = useHistory();
   const theme = useTheme();
@@ -84,12 +83,15 @@ function ProductsComponent() {
 
   const allFoods = useSelector((state) => state.allFoods);
   const { errorAllFoods, allFoodsData, loadingAllFoods } = allFoods;
+  const allCategories = useSelector((state) => state.allCategories);
+  const { errorAllCategories, allCategoriesData, loadingAllCategories } = allCategories;
 
   useEffect(() => {
     // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
     //   dispatch(signout());
     // }
     dispatch(getAllFoods());
+    dispatch(getAllCategories());
   }, [dispatch]);
 
   function handleChange(value) {
@@ -98,10 +100,10 @@ function ProductsComponent() {
 
     return (
         <Column className={classes.container}>
-          {loadingAllFoods ? (
+          {loadingAllFoods || loadingAllCategories ? (
               <LoadingComponent loading={loadingAllFoods} />
-            ) : errorAllFoods ? (
-              <Alert message="Error" description={errorAllFoods} type="error" showIcon />
+            ) : errorAllFoods || errorAllCategories ? (
+              <Alert message="Error" description={errorAllFoods ? errorAllFoods : errorAllCategories} type="error" showIcon />
             ) : (
             <>
               <Row
@@ -109,17 +111,10 @@ function ProductsComponent() {
                   className={classes.lastRow}
                   breakpoints={{ 1024: 'column' }}
               >
-                <Select
-                  placeholder="Выберите категорию"
-                  className={classes.select}
-                  size='large'
-                  onChange={handleChange}>
-                  <Option value="jack">Jack</Option>
-                  <Option value="lucy">Lucy</Option>
-                  <Option value="disabled" disabled>
-                    Disabled
-                  </Option>
-                  <Option value="Yiminghe">yiminghe</Option>
+                <Select onChange={handleChange} placeholder="Выберите категорию" style={{ width: "260px" }}>
+                  {allCategoriesData.map(({id, name}) => {
+                    return <Select.Option key={id} value={id}>{name}</Select.Option>
+                  })}
                 </Select>
                 <Button
                   className={classes.button}
@@ -141,7 +136,7 @@ function ProductsComponent() {
                           total: allFoodsData && allFoodsData.length,
                           showTotal: total => `Всего ${total} продуктов`,
                           size: 'small',
-                          pageSize: 3,
+                          pageSize: 6,
                           defaultCurrent: 1}}
                       columns={columns}
                       rowKey="id"

@@ -98,7 +98,7 @@ function UsersComponent() {
                         total: allUsersData && allUsersData.length,
                         showTotal: total => `Всего ${total} пользователей`,
                         size: 'small',
-                        pageSize: 3,
+                        pageSize: 6,
                         defaultCurrent: 1}}
                     columns={columns}
                     rowKey="id"

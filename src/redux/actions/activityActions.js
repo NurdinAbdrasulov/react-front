@@ -14,7 +14,6 @@ export const getAllActivities = () => async (dispatch, getState) => {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
       });
-      console.log(data);
       dispatch({ type: GET_ACTIVITIES_SUCCESS, payload: data });
   } catch (error) {
       dispatch({ type: GET_ACTIVITIES_FAIL, payload: error.message });
@@ -94,4 +93,4 @@ export const getActivity = (id) => async (dispatch, getState) => {
   } catch (error) {
       dispatch({ type: GET_ACTIVITY_FAIL, payload: error.message });
   }
-}
+};

@@ -41,7 +41,7 @@ const columns = [
       dataIndex: 'icon',
       key: 'icon',
       width: 222,
-      render: (activityImage) => <img src={activityImage} alt="activity icon" />
+      render: (activityImage) => <img src={"http://"+activityImage} alt="activity icon" />
     },
     {
       title: 'Название',
