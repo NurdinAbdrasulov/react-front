@@ -146,7 +146,7 @@ function CreateActivitiesComponent() {
                             </Form.Item>
 
                             <Form.Item
-                                label="Upload"
+                                label="Иконка"
                                 name="icon"
                                 valuePropName="fileList"
                                 getValueFromEvent={normFile}

@@ -55,6 +55,7 @@ function EditActivitiesComponent(props) {
     const [previewTitle, setPreviewTitle] = useState('');
 
     const onFinish = async(values) => {
+        // const blob = await fetch(values.icon[0].url).then((res) => res.blob());
         let formData = new FormData();
         formData.append("icon", fileList[0].originFileObj);
         formData.append("name", values.name);
@@ -201,7 +202,7 @@ function EditActivitiesComponent(props) {
                             </Form.Item>
 
                             <Form.Item
-                                label="Upload"
+                                label="Иконка"
                                 name="icon"
                                 valuePropName="fileList"
                                 getValueFromEvent={normFile}
