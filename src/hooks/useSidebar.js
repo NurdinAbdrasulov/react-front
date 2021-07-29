@@ -18,7 +18,7 @@ export function SidebarProvider({ children, defaultItem }) {
 
 export const useSidebar = ({ isCollapsible, item, items = [] } = {}) => {
     const { currentItem, setCurrentItem } = useContext(SidebarContext);
-    const isActive = item === currentItem || items.includes(currentItem);
+    const isActive = item === currentItem || items.toString().includes(currentItem.substr(1, item.length));
     const [isExpanded, setIsExpanded] = useState(isActive);
 
     useEffect(() => {

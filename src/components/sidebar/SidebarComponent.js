@@ -45,7 +45,15 @@ function SidebarComponent() {
                 onClick={() => onClick(SLUGS.products)}
             />
             <MenuItem
+                id={SLUGS.categoryProducts}
+                items={[SLUGS.editСategoryProducts, SLUGS.createСategoryProducts]}
+                title='Категории продуктов'
+                icon={IconProducts}
+                onClick={() => onClick(SLUGS.categoryProducts)}
+            />
+            <MenuItem
                 id={SLUGS.activity}
+                items={[SLUGS.editActivity, SLUGS.createActivity]}
                 title='Активности'
                 icon={IconActivity}
                 onClick={() => onClick(SLUGS.activity)}
