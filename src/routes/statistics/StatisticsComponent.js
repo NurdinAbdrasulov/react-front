@@ -1,10 +1,10 @@
-import { Row } from 'antd';
+import { Alert, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { createUseStyles, useTheme } from 'react-jss';
 import { useDispatch, useSelector } from 'react-redux';
 import { Column } from 'simple-flexbox';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getStatistics } from '../../redux/actions/statisticsActions';
-import { signout } from '../../redux/actions/userActions';
 import PieChart from './PieChart';
 
   const useStyles = createUseStyles((theme) => ({
@@ -56,12 +56,20 @@ import PieChart from './PieChart';
     } else if(value && value.female) {
       arr = [
         {
+<<<<<<< HEAD
           "id": "",
+=======
+          "id": "Женщины",
+>>>>>>> 60b6865d6fe32d8f2ce6eb21a384cd98eb56b889
           "label": "Женщины",
           "value": value.female,
         },
         {
+<<<<<<< HEAD
           "id": "",
+=======
+          "id": "Мужчины",
+>>>>>>> 60b6865d6fe32d8f2ce6eb21a384cd98eb56b889
           "label": "Мужчины",
           "value": value.male,
         }
@@ -73,39 +81,45 @@ import PieChart from './PieChart';
 function StatisticsComponent() {
 
   const allStatistics = useSelector((state) => state.allStatistics);
-  const { errorStatistics, statistics } = allStatistics;
-  console.log(allStatistics);
+  const { errorStatistics, statistics, loadingStatistics } = allStatistics;
 
   const theme = useTheme();
   const classes = useStyles({ theme });
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
-      dispatch(signout());
-    } else if(!errorStatistics || !statistics) {
-      dispatch(getStatistics());
-    }
-  }, [dispatch, errorStatistics, statistics]);
+    // if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
+    //   dispatch(signout());
+    // }
+    dispatch(getStatistics());
+  }, [dispatch]);
 
     return (
         <Column
           horizontal='center'
           className={classes.container}>
-            <Row className={classes.row}>
+            {loadingStatistics ? (
+              <LoadingComponent loading={loadingStatistics} />
+            ) : errorStatistics ? (
+              <Alert message="Error" description={errorStatistics} type="error" showIcon />
+            ) : (
+              <>
+                <Row className={classes.row}>
+                    <div className={classes.rowBlock}>
+                      <span className={classes.statsBlockTitle}>Пол</span>
+                      <PieChart enableArcLinkLabels={false} data={converter(statistics && statistics[2].data)} />
+                    </div>
+                    <div className={classes.rowBlock}>
+                      <span className={classes.statsBlockTitle}>Диабет</span>
+                      <PieChart enableArcLinkLabels={true} data={converter(statistics && statistics[1].data)} />
+                    </div>
+                </Row>
                 <div className={classes.rowBlock}>
-                  <span className={classes.statsBlockTitle}>Пол</span>
-                  <PieChart data={converter(statistics && statistics[2].data)} />
+                  <span className={classes.statsBlockTitle}>Возраст</span>
+                  <PieChart enableArcLinkLabels={true} data={converter(statistics && statistics[0].data)} />
                 </div>
-                <div className={classes.rowBlock}>
-                  <span className={classes.statsBlockTitle}>Диабет</span>
-                  <PieChart data={converter(statistics && statistics[1].data)} />
-                </div>
-            </Row>
-            <div className={classes.rowBlock}>
-              <span className={classes.statsBlockTitle}>Возраст</span>
-              <PieChart data={converter(statistics && statistics[0].data)} />
-            </div>
+              </>
+            )}
         </Column>
     );
 }

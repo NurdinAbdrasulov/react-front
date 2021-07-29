@@ -3,9 +3,14 @@ const SLUGS = {
     statistics: '/statistics',
     users: '/users',
     products: '/products',
-    editProduct: '/products/editProduct',
+    editProduct: '/products/editProduct/:id',
     createProduct: '/products/createProduct',
+    categoryProducts: '/categoryProducts',
+    editСategoryProducts: '/categoryProducts/editСategoryProduct/:id',
+    createСategoryProducts: '/categoryProducts/createСategoryProduct',
     activity: '/activity',
+    createActivity: '/activity/createActivity',
+    editActivity: '/activity/editActivity/:id',
     // auth
     login: '/login',
 };

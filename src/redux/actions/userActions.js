@@ -31,7 +31,7 @@ export const getAllUsers = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/user/getAllUsers', {
+      const { data } = await Axios.get('http://167.172.167.145:9090/users', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }

@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import { Column, Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import 'antd/dist/antd.css';
-import { Table } from 'antd';
+import { Alert, Table } from 'antd';
 import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, signout } from '../../redux/actions/userActions';
+import { getAllUsers } from '../../redux/actions/userActions';
+import LoadingComponent from '../../components/loading/LoadingComponent';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -70,35 +71,43 @@ function UsersComponent() {
   const dispatch = useDispatch();
 
   const allUsers = useSelector((state) => state.allUsers);
-  const { errorAllUsers, allUsersData } = allUsers;
+  const { errorAllUsers, allUsersData, loadingAllUsers } = allUsers;
 
   useEffect(() => {
-    if(errorAllUsers && errorAllUsers.indexOf("403") !== -1) {
-      dispatch(signout());
-    }
+    // if(errorAllUsers && errorAllUsers.indexOf("403") !== -1) {
+    //   dispatch(signout());
+    // }
     dispatch(getAllUsers());
-  }, [dispatch, errorAllUsers]);
+  }, [dispatch]);
 
     return (
-        <Column className={classes.container}>
-            <Row
-                horizontal='space-between'
-                className={classes.lastRow}
-                breakpoints={{ 1024: 'column' }}
-            >
-                <Table
-                    className={classes.table}
-                    pagination={{
-                        total: allUsersData && allUsersData.length,
-                        showTotal: total => `Всего ${total} пользователей`,
-                        size: 'small',
-                        pageSize: 3,
-                        defaultCurrent: 1}}
-                    columns={columns}
-                    rowKey="id"
-                    dataSource={allUsersData} />
-            </Row>
-        </Column>
+        <>
+          {loadingAllUsers ? (
+              <LoadingComponent loading={loadingAllUsers} />
+            ) : errorAllUsers ? (
+              <Alert message="Error" description={errorAllUsers} type="error" showIcon />
+            ) : allUsersData ? (
+            <Column className={classes.container}>
+              <Row
+                  horizontal='space-between'
+                  className={classes.lastRow}
+                  breakpoints={{ 1024: 'column' }}
+              >
+                  <Table
+                      className={classes.table}
+                      pagination={{
+                          total: allUsersData && allUsersData.length,
+                          showTotal: total => `Всего ${total} пользователей`,
+                          size: 'small',
+                          pageSize: 6,
+                          defaultCurrent: 1}}
+                      columns={columns}
+                      rowKey="id"
+                      dataSource={allUsersData} />
+              </Row>
+            </Column>
+            ) : ""}
+        </>
     );
 }
 

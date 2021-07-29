@@ -1,6 +1,6 @@
 import { ResponsivePie } from '@nivo/pie';
 
-const PieChart = ({data}) => {
+const PieChart = ({enableArcLinkLabels, data}) => {
 return (
   <ResponsivePie
     theme={{
@@ -13,6 +13,7 @@ return (
     innerRadius={0.4}
     padAngle={0.7}
     cornerRadius={3}
+    enableArcLinkLabels={enableArcLinkLabels}
     activeOuterRadiusOffset={8}
     borderWidth={1}
     borderColor={{from: 'color', modifiers: [['darker', 0.2]]}}
