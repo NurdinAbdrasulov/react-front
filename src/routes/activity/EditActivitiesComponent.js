@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Column } from 'simple-flexbox';
+import { Column, Row } from 'simple-flexbox';
 import { createUseStyles, useTheme } from 'react-jss';
 import 'antd/dist/antd.css';
-import { Button, Input, Form, Upload, notification } from 'antd';
+import { Button, Input, Form, Upload, Alert, notification, Modal } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import Modal from 'antd/lib/modal/Modal';
-import { createActivity } from '../../redux/actions/activityActions';
+import { deleteActivity, getActivity, updateActivity } from '../../redux/actions/activityActions';
 import { useDispatch, useSelector } from 'react-redux';
-import LoadingComponent from '../../components/loading/LoadingComponent';
-import { CREATE_ACTIVITY_RESET } from '../../redux/constants/activityConstants';
-import SLUGS from '../../resources/slugs';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import LoadingComponent from '../../components/loading';
+import { DELETE_ACTIVITY_RESET, UPDATE_ACTIVITY_RESET } from '../../redux/constants/activityConstants';
 import { useHistory } from 'react-router-dom';
+import SLUGS from '../../resources/slugs';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
-      width: 300,
+    //   width: 300,
     },
     lastRow: {
       marginTop: 30
@@ -42,7 +42,8 @@ function getBase64(file) {
     });
 }
 
-function CreateActivitiesComponent() {
+function EditActivitiesComponent(props) {
+    const activityId = props.match.params.id;
     const theme = useTheme();
     const classes = useStyles({ theme });
     const { push } = useHistory();
@@ -53,14 +54,13 @@ function CreateActivitiesComponent() {
     const [previewImage, setPreviewImage] = useState('');
     const [previewTitle, setPreviewTitle] = useState('');
 
-    const createdActivity = useSelector((state) => state.createdActivity);
-    const { errorCreatedActivity, createdActivityData, loadingCreateActivty } = createdActivity;
-
     const onFinish = async(values) => {
+        // const blob = await fetch(values.icon[0].url).then((res) => res.blob());
         let formData = new FormData();
         formData.append("icon", fileList[0].originFileObj);
         formData.append("name", values.name);
-        dispatch(createActivity(formData));
+        formData.append("id", activityId);
+        dispatch(updateActivity(formData, activityId));
     };
 
     const handlePreview = async file => {
@@ -70,10 +70,6 @@ function CreateActivitiesComponent() {
         setPreviewImage(file.url || file.preview);
         setPreviewVisible(true);
         setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1))
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
     };
     
     const handleChange = ({ fileList }) => setFileList(fileList);
@@ -85,6 +81,19 @@ function CreateActivitiesComponent() {
           onSuccess("ok");
         }, 0);
     };
+
+    const showDeleteConfirm = (activityData) => {
+        Modal.confirm({
+          title: `Вы уверены, что хотите удалить ${activityData.name}?`,
+          icon: <ExclamationCircleOutlined />,
+          okText: 'Да',
+          okType: 'primary',
+          cancelText: 'Нет',
+          onOk() {
+            dispatch(deleteActivity(activityData.id));
+          }
+        });
+    }
 
     const normFile = (e) => {
         if (Array.isArray(e)) {
@@ -100,37 +109,84 @@ function CreateActivitiesComponent() {
         </div>
     );
 
+    const activity = useSelector((state) => state.activity);
+    const { errorActivity, activityData, loadingActivity } = activity;
+    const updatedActivity = useSelector((state) => state.updatedActivity);
+    const { errorUpdatedActivity, updatedActivityData, loadingUpdateActivity } = updatedActivity;
+    const deletedActivity = useSelector((state) => state.deletedActivity);
+    const { errorDeletedActivity, deletedActivityData, loadingDeleteActivity } = deletedActivity;
+
     useEffect(() => {
         // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
         //   dispatch(signout());
         // }
-        if(createdActivityData) {
+        if(deletedActivityData) {
             notification['success']({
-                message: 'Успешно добавлен!',
+                message: 'Успешно удален!',
             });
             push(SLUGS.activity);
-            dispatch({ type: CREATE_ACTIVITY_RESET });
+            dispatch({ type: DELETE_ACTIVITY_RESET });
         }
-        if(errorCreatedActivity) {
+        if(errorDeletedActivity) {
             notification['error']({
-                message: errorCreatedActivity
+                message: errorDeletedActivity
             });
-            dispatch({ type: CREATE_ACTIVITY_RESET });
+            dispatch({ type: DELETE_ACTIVITY_RESET });
         }
-    }, [dispatch, createdActivityData, push, errorCreatedActivity]);
+        if(updatedActivityData) {
+            dispatch(getActivity(activityId));
+            notification['success']({
+                message: 'Успешно изменен!',
+            });
+            dispatch({ type: UPDATE_ACTIVITY_RESET });
+        }
+        if(errorUpdatedActivity) {
+            notification['error']({
+                message: errorUpdatedActivity
+            });
+            dispatch({ type: UPDATE_ACTIVITY_RESET });
+        }
+        if(activityData) {
+            setFileList([{
+                uid: activityData.id,
+                name: activityData.name,
+                status: 'done',
+                url: "http://" + activityData.icon
+            }])
+        }
+      }, [dispatch, activityId, activityData, deletedActivityData, updatedActivityData, errorDeletedActivity, errorUpdatedActivity, push]);
+
+      useEffect(() => {
+        // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
+        //   dispatch(signout());
+        // }
+        dispatch(getActivity(activityId));
+      }, [dispatch, activityId]);
 
     return (
         <>
-            {loadingCreateActivty ? (
-                <LoadingComponent loading />
-            ) : (
-                <Column className={classes.container}>
+            {loadingActivity || loadingDeleteActivity || loadingUpdateActivity ? (
+              <LoadingComponent loading={loadingActivity} />
+            ) : errorActivity ? (
+              <Alert message="Error" description={errorActivity} type="error" showIcon />
+            ) : activityData ? (
+            <Column className={classes.container}>
+                <Row horizontal='space-between'>
                     <Form
+                        initialValues={{
+                            name: activityData.name,
+                            icon: [{
+                                uid: activityData.id,
+                                name: activityData.name,
+                                status: 'done',
+                                url: "http://" + activityData.icon
+                            }]
+                        }}
                         name="basic"
                         layout="vertical"
                         onFinish={onFinish}
-                        onFinishFailed={onFinishFailed}
                         requiredMark={false}
+                        style={{ width: "300px" }}
                         >
                             <Form.Item
                                 label="Название"
@@ -160,6 +216,7 @@ function CreateActivitiesComponent() {
                                     name="avatar"
                                     listType="picture-card"
                                     onPreview={handlePreview}
+                                    maxCount={1}
                                     onChange={handleChange}
                                     customRequest={dummyRequest}
                                 >{fileList.length >= 1 ? null : uploadButton}
@@ -180,11 +237,20 @@ function CreateActivitiesComponent() {
                                     Сохранить
                                 </Button>
                             </Form.Item>
-                        </Form>
-                </Column>
-            )}
+                    </Form>
+                    <Button
+                        className={classes.button}
+                        size='large'
+                        onClick={() => showDeleteConfirm(activityData)}
+                        danger
+                        ghost>
+                            Удалить продукт
+                    </Button>
+                </Row>
+            </Column>
+            ) : ""}
         </>
     );
 }
 
-export default CreateActivitiesComponent;
+export default EditActivitiesComponent;

@@ -56,12 +56,12 @@ import PieChart from './PieChart';
     } else if(value && value.female) {
       arr = [
         {
-          "id": "Есть",
+          "id": "Женщины",
           "label": "Женщины",
           "value": value.female,
         },
         {
-          "id": "Нет",
+          "id": "Мужчины",
           "label": "Мужчины",
           "value": value.male,
         }
@@ -74,7 +74,6 @@ function StatisticsComponent() {
 
   const allStatistics = useSelector((state) => state.allStatistics);
   const { errorStatistics, statistics, loadingStatistics } = allStatistics;
-  console.log(allStatistics);
 
   const theme = useTheme();
   const classes = useStyles({ theme });
@@ -100,16 +99,16 @@ function StatisticsComponent() {
                 <Row className={classes.row}>
                     <div className={classes.rowBlock}>
                       <span className={classes.statsBlockTitle}>Пол</span>
-                      <PieChart data={converter(statistics && statistics[2].data)} />
+                      <PieChart enableArcLinkLabels={false} data={converter(statistics && statistics[2].data)} />
                     </div>
                     <div className={classes.rowBlock}>
                       <span className={classes.statsBlockTitle}>Диабет</span>
-                      <PieChart data={converter(statistics && statistics[1].data)} />
+                      <PieChart enableArcLinkLabels={true} data={converter(statistics && statistics[1].data)} />
                     </div>
                 </Row>
                 <div className={classes.rowBlock}>
                   <span className={classes.statsBlockTitle}>Возраст</span>
-                  <PieChart data={converter(statistics && statistics[0].data)} />
+                  <PieChart enableArcLinkLabels={true} data={converter(statistics && statistics[0].data)} />
                 </div>
               </>
             )}

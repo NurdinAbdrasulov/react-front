@@ -81,31 +81,33 @@ function UsersComponent() {
   }, [dispatch]);
 
     return (
-        <Column className={classes.container}>
+        <>
           {loadingAllUsers ? (
               <LoadingComponent loading={loadingAllUsers} />
             ) : errorAllUsers ? (
               <Alert message="Error" description={errorAllUsers} type="error" showIcon />
-            ) : (
-            <Row
-                horizontal='space-between'
-                className={classes.lastRow}
-                breakpoints={{ 1024: 'column' }}
-            >
-                <Table
-                    className={classes.table}
-                    pagination={{
-                        total: allUsersData && allUsersData.length,
-                        showTotal: total => `Всего ${total} пользователей`,
-                        size: 'small',
-                        pageSize: 3,
-                        defaultCurrent: 1}}
-                    columns={columns}
-                    rowKey="id"
-                    dataSource={allUsersData} />
-            </Row>
-            )}
-        </Column>
+            ) : allUsersData ? (
+            <Column className={classes.container}>
+              <Row
+                  horizontal='space-between'
+                  className={classes.lastRow}
+                  breakpoints={{ 1024: 'column' }}
+              >
+                  <Table
+                      className={classes.table}
+                      pagination={{
+                          total: allUsersData && allUsersData.length,
+                          showTotal: total => `Всего ${total} пользователей`,
+                          size: 'small',
+                          pageSize: 6,
+                          defaultCurrent: 1}}
+                      columns={columns}
+                      rowKey="id"
+                      dataSource={allUsersData} />
+              </Row>
+            </Column>
+            ) : ""}
+        </>
     );
 }
 
