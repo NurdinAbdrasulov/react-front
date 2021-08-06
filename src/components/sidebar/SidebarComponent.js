@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import SLUGS from '../../resources/slugs';
 import {
     IconActivity,
+    IconAgreement,
     IconProducts,
     IconStatistics,
     IconUsers
@@ -57,6 +58,12 @@ function SidebarComponent() {
                 title='Активности'
                 icon={IconActivity}
                 onClick={() => onClick(SLUGS.activity)}
+            />
+            <MenuItem
+                id={SLUGS.usersAgreement}
+                title='Пользовательское соглашение'
+                icon={IconAgreement}
+                onClick={() => onClick(SLUGS.usersAgreement)}
             />
         </Menu>
     );

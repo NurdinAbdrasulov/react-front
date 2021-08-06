@@ -3,7 +3,7 @@ import IconCheckboxOn from './checkbox-on';
 import IconAgents from './icon-agents';
 import IconArrowUp from './icon-arrow-up';
 import IconArticles from './icon-articles';
-import IconBell from './icon-bell-new';
+import IconAgreement from './icon-agreement';
 import IconBurger from './icon-burger';
 import IconContacts from './icon-contacts';
 import IconIdeas from './icon-ideas';
@@ -21,7 +21,7 @@ export {
     IconAgents,
     IconArrowUp,
     IconArticles,
-    IconBell,
+    IconAgreement,
     IconBurger,
     IconContacts,
     IconIdeas,

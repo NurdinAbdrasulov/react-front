@@ -67,6 +67,9 @@ function HeaderComponent() {
         case currentItem === SLUGS.createActivity:
             title = 'Создать активность';
             break;
+        case currentItem === SLUGS.usersAgreement:
+            title = 'Пользовательское соглашение';
+            break;
         default:
             title = '';
     }

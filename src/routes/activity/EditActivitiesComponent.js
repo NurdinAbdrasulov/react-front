@@ -55,11 +55,15 @@ function EditActivitiesComponent(props) {
     const [previewTitle, setPreviewTitle] = useState('');
 
     const onFinish = async(values) => {
-        // const blob = await fetch(values.icon[0].url).then((res) => res.blob());
-        let formData = new FormData();
-        formData.append("icon", fileList[0].originFileObj);
-        formData.append("name", values.name);
-        formData.append("id", activityId);
+        var formData = new FormData();
+        if(values.icon[0].url) {
+            const blob = await fetch(values.icon[0].url).then((res) => res.blob());
+            formData.append("icon", blob);
+        } else {
+            formData.append("icon", fileList[0].originFileObj);
+            formData.append("name", values.name);
+            formData.append("id", activityId);
+        }
         dispatch(updateActivity(formData, activityId));
     };
 

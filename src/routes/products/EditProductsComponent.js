@@ -42,7 +42,6 @@ function EditProductsComponent(props) {
     const dispatch = useDispatch();
 
     const onFinish = (values) => {
-        // console.log(values);
         dispatch(updateFood(values, foodId));
     };
     

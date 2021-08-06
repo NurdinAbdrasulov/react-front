@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllFoods } from '../../redux/actions/foodActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getAllCategories } from '../../redux/actions/categoryActions';
+import { signout } from '../../redux/actions/userActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -87,9 +88,12 @@ function ProductsComponent() {
   const { errorAllCategories, allCategoriesData, loadingAllCategories } = allCategories;
 
   useEffect(() => {
-    // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorAllFoods]);
+
+  useEffect(() => {
     dispatch(getAllFoods());
     dispatch(getAllCategories());
   }, [dispatch]);
