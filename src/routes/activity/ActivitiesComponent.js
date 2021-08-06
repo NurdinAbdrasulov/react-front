@@ -114,7 +114,7 @@ function ActivitiesComponent() {
                                 total: allActivitiesData && allActivitiesData.length,
                                 showTotal: total => `Всего ${total} активностей`,
                                 size: 'small',
-                                pageSize: 3,
+                                pageSize: 5,
                                 defaultCurrent: 1}}
                             columns={columns}
                             rowKey="id"

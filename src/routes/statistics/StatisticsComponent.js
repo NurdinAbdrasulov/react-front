@@ -15,7 +15,7 @@ import PieChart from './PieChart';
     row: {
       width: '100%',
       justifyContent: 'space-between',
-      '@media (max-width: 1315px)': {
+      '@media (max-width: 817px)': {
         justifyContent: 'space-around'
       }
     },
@@ -29,6 +29,20 @@ import PieChart from './PieChart';
       height: 438,
       width: 477,
       backgroundColor: theme.color.lightWhite,
+      '@media (max-width: 1316px)': {
+        width: 400,
+        height: 400
+      },
+      '@media (max-width: 1162px)': {
+        width: 355,
+        height: 350,
+      },
+      '@media (max-width: 442px)': {
+        width: 325,
+      },
+      '@media (max-width: 400px)': {
+        width: 300,
+      }
   }}));
 
   const converter = (value) => {
