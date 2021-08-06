@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Column } from 'simple-flexbox';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getStatistics } from '../../redux/actions/statisticsActions';
+import { signout } from '../../redux/actions/userActions';
 import PieChart from './PieChart';
 
   const useStyles = createUseStyles((theme) => ({
@@ -14,7 +15,7 @@ import PieChart from './PieChart';
     row: {
       width: '100%',
       justifyContent: 'space-between',
-      '@media (max-width: 1315px)': {
+      '@media (max-width: 817px)': {
         justifyContent: 'space-around'
       }
     },
@@ -28,6 +29,20 @@ import PieChart from './PieChart';
       height: 438,
       width: 477,
       backgroundColor: theme.color.lightWhite,
+      '@media (max-width: 1316px)': {
+        width: 400,
+        height: 400
+      },
+      '@media (max-width: 1162px)': {
+        width: 355,
+        height: 350,
+      },
+      '@media (max-width: 442px)': {
+        width: 325,
+      },
+      '@media (max-width: 400px)': {
+        width: 300,
+      }
   }}));
 
   const converter = (value) => {
@@ -35,7 +50,7 @@ import PieChart from './PieChart';
     if(value && value[0]) {
       arr = value.map((currentValue, index) => {
         return {
-          id: index,
+          id: currentValue.ageDiapason,
           label: currentValue.ageDiapason,
           value: currentValue.percent,
         }}
@@ -80,9 +95,12 @@ function StatisticsComponent() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorStatistics && errorStatistics.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorStatistics]);
+
+  useEffect(() => {
     dispatch(getStatistics());
   }, [dispatch]);
 

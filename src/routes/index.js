@@ -17,7 +17,7 @@ function Routes() {
         window.scrollTo(0, 0);
     }, [pathname]);
 
-    return userInfo ? <PrivateSection /> : <PublicRoutes />;
+    return !userInfo ? <PublicRoutes /> : <PrivateSection />;
 }
 
 export default Routes;

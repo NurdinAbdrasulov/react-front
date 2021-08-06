@@ -55,11 +55,15 @@ function EditActivitiesComponent(props) {
     const [previewTitle, setPreviewTitle] = useState('');
 
     const onFinish = async(values) => {
-        // const blob = await fetch(values.icon[0].url).then((res) => res.blob());
-        let formData = new FormData();
-        formData.append("icon", fileList[0].originFileObj);
-        formData.append("name", values.name);
-        formData.append("id", activityId);
+        var formData = new FormData();
+        if(values.icon[0].url) {
+            const blob = await fetch(values.icon[0].url).then((res) => res.blob());
+            formData.append("icon", blob);
+        } else {
+            formData.append("icon", fileList[0].originFileObj);
+            formData.append("name", values.name);
+            formData.append("id", activityId);
+        }
         dispatch(updateActivity(formData, activityId));
     };
 
@@ -116,6 +120,8 @@ function EditActivitiesComponent(props) {
     const deletedActivity = useSelector((state) => state.deletedActivity);
     const { errorDeletedActivity, deletedActivityData, loadingDeleteActivity } = deletedActivity;
 
+    console.log(deletedActivityData)
+
     useEffect(() => {
         // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
         //   dispatch(signout());
@@ -138,6 +144,7 @@ function EditActivitiesComponent(props) {
             notification['success']({
                 message: 'Успешно изменен!',
             });
+            push(SLUGS.activity);
             dispatch({ type: UPDATE_ACTIVITY_RESET });
         }
         if(errorUpdatedActivity) {

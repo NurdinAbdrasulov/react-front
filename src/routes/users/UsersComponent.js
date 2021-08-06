@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import { Alert, Table } from 'antd';
 import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers } from '../../redux/actions/userActions';
+import { getAllUsers, signout } from '../../redux/actions/userActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 
 const useStyles = createUseStyles((theme) => ({
@@ -74,9 +74,12 @@ function UsersComponent() {
   const { errorAllUsers, allUsersData, loadingAllUsers } = allUsers;
 
   useEffect(() => {
-    // if(errorAllUsers && errorAllUsers.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorAllUsers && errorAllUsers.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorAllUsers]);
+
+  useEffect(() => {
     dispatch(getAllUsers());
   }, [dispatch]);
 

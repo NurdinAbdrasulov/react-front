@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllFoods } from '../../redux/actions/foodActions';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getAllCategories } from '../../redux/actions/categoryActions';
+import { signout } from '../../redux/actions/userActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -23,16 +24,13 @@ const useStyles = createUseStyles((theme) => ({
       width: 192,
       display: 'flex',
       justifyContent: 'space-around',
-      alignItems: 'center'
+      alignItems: 'center',
+      '@media (max-width: 600px)': {
+        marginTop: 15
+      }
     },
     select: {
       width: 260,
-    },
-    tasks: {
-        marginTop: 0,
-        '@media (max-width: 1024px)': {
-            marginTop: 30
-        }
     }
 }));
 
@@ -41,37 +39,43 @@ const columns = [
         title: 'Название',
         dataIndex: 'name',
         key: 'name',
-        width: 567
+        width: 567,
+        responsive: ["xs", "sm"]
     },
     {
         title: 'Ккал',
         dataIndex: 'calories',
         key: 'calories',
-        width: 222
+        width: 222,
+        responsive: ["xs", "sm"]
     },
     {
         title: 'Белки',
         dataIndex: 'proteins',
         key: 'protein',
-        width: 105
+        width: 105,
+        responsive: ["sm"]
     },
     {
         title: 'Жиры',
         dataIndex: 'fats',
         key: 'fats',
-        width: 105
+        width: 105,
+        responsive: ["sm"]
       },
     {
         title: 'Углеводы',
         key: 'carbohydrates',
         dataIndex: 'carbohydrates',
-        width: 105
+        width: 105,
+        responsive: ["sm"]
     },
     {
       title: '',
       key: 'x',
       dataIndex: '',
-      render: (record) => <Link to={`/products/editProduct/${record.id}`}>Изменить</Link>
+      render: (record) => <Link to={`/products/editProduct/${record.id}`}>Изменить</Link>,
+      responsive: ["xs", "sm"]
     }
   ];
 
@@ -87,9 +91,12 @@ function ProductsComponent() {
   const { errorAllCategories, allCategoriesData, loadingAllCategories } = allCategories;
 
   useEffect(() => {
-    // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorAllFoods]);
+
+  useEffect(() => {
     dispatch(getAllFoods());
     dispatch(getAllCategories());
   }, [dispatch]);
@@ -109,7 +116,7 @@ function ProductsComponent() {
               <Row
                   horizontal='space-between'
                   className={classes.lastRow}
-                  breakpoints={{ 1024: 'column' }}
+                  breakpoints={{ 600: 'column' }}
               >
                 <Select onChange={handleChange} placeholder="Выберите категорию" style={{ width: "260px" }}>
                   {allCategoriesData.map(({id, name}) => {

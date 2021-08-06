@@ -9,6 +9,7 @@ import { IconAdd } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getAllActivities } from '../../redux/actions/activityActions';
+import { signout } from '../../redux/actions/userActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -68,6 +69,12 @@ function ActivitiesComponent() {
   const { errorAllActivities, allActivitiesData, loadingAllActivities } = allActivities;
 
   useEffect(() => {
+    if(errorAllActivities && errorAllActivities.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorAllActivities]);
+
+  useEffect(() => {
     // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
     //   dispatch(signout());
     // }
@@ -107,7 +114,7 @@ function ActivitiesComponent() {
                                 total: allActivitiesData && allActivitiesData.length,
                                 showTotal: total => `Всего ${total} активностей`,
                                 size: 'small',
-                                pageSize: 3,
+                                pageSize: 5,
                                 defaultCurrent: 1}}
                             columns={columns}
                             rowKey="id"

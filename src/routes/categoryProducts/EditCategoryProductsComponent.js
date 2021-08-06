@@ -90,6 +90,7 @@ function EditCategoryProductsComponent(props) {
             notification['success']({
                 message: 'Успешно изменен!',
             });
+            push(SLUGS.categoryProducts);
             dispatch({ type: UPDATE_CATEGORY_FOOD_RESET });
         }
         if(errorUpdatedCategoryFood) {

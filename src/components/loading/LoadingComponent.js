@@ -60,7 +60,7 @@ function LoadingComponent({
             {loading && (
                 <Column className={classes.container} horizontal='center' vertical='center'>
                     <div className={classes.loading}></div>
-                    {!hideText && <span className={classes.loadingSpan}>Loading...</span>}
+                    {!hideText && <span className={classes.loadingSpan}>Загружается...</span>}
                 </Column>
             )}
             {children || <div />}

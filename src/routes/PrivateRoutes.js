@@ -12,6 +12,7 @@ import EditProductsComponent from './products/EditProductsComponent';
 import CategoryProductsComponent from './categoryProducts/CategoryProductsComponent';
 import EditCategoryProductsComponent from './categoryProducts/EditCategoryProductsComponent';
 import CreateCategoryProductsComponent from './categoryProducts/CreateCategoryProductsComponent';
+import UserAgreementComponent from './userAgreemnent/UserAgreementComponent';
 
 const StatisticsComponent = lazy(() => import('./statistics/StatisticsComponent'));
 
@@ -30,6 +31,7 @@ function PrivateRoutes() {
                 <Route exact path={SLUGS.activity} component={ActivitiesComponent} />
                 <Route exact path={SLUGS.editActivity} component={EditActivitiesComponent} />
                 <Route exact path={SLUGS.createActivity} component={CreateActivitiesComponent} />
+                <Route exact path={SLUGS.usersAgreement} component={UserAgreementComponent} />
                 <Redirect to={SLUGS.statistics} />
             </Switch>
         </Suspense>

@@ -9,6 +9,7 @@ import { IconAdd } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingComponent from '../../components/loading/LoadingComponent';
 import { getAllCategories } from '../../redux/actions/categoryActions';
+import { signout } from '../../redux/actions/userActions';
 
 const useStyles = createUseStyles((theme) => ({
     container: {
@@ -60,9 +61,12 @@ function CategoryProductsComponent() {
   const { errorAllCategories, allCategoriesData, loadingAllCategories } = allCategories;
 
   useEffect(() => {
-    // if(errorAllFoods && errorAllFoods.indexOf("403") !== -1) {
-    //   dispatch(signout());
-    // }
+    if(errorAllCategories && errorAllCategories.indexOf("403") !== -1) {
+      dispatch(signout());
+    }
+  }, [dispatch, errorAllCategories]);
+
+  useEffect(() => {
     dispatch(getAllCategories());
   }, [dispatch]);
 
