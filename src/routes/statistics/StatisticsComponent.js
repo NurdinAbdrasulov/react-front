@@ -50,7 +50,7 @@ import PieChart from './PieChart';
     if(value && value[0]) {
       arr = value.map((currentValue, index) => {
         return {
-          id: index,
+          id: currentValue.ageDiapason,
           label: currentValue.ageDiapason,
           value: currentValue.percent,
         }}
