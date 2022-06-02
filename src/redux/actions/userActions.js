@@ -4,7 +4,7 @@ import { GET_USERAGREEMENT_FAIL, GET_USERAGREEMENT_REQUEST, GET_USERAGREEMENT_SU
 export const signin = (email, password) => async (dispatch) => {
     dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
     try {
-      const { data } = await Axios.post('http://167.172.167.145:9090/login', { email, password });
+      const { data } = await Axios.post('http://localhost:8080/login', { email, password });
       dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {

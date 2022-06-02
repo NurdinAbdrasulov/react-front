@@ -47,7 +47,7 @@ function LoginComponent() {
             horizontal='center'>
             <Column className={classes.block}>
                 <div style={{ paddingBottom: 32, paddingTop: 8 }}>
-                    <IconLogo fill={'rgba(0, 0, 0, 0.85)'} />
+                    <b>Административный панель</b>
                 </div>
                 <Form
                     name="basic"
