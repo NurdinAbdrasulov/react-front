@@ -9,7 +9,7 @@ export const getAllActivities = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/activities', {
+      const { data } = await Axios.get('http://localhost:9090/open/statistics/', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
@@ -27,7 +27,7 @@ export const createActivity = (bodyFormData) => async (dispatch, getState) => {
     } = getState();
     try {
       const { data } = await Axios.post(
-        'http://167.172.167.145:9090/activities',
+        'http://localhost:9090/open/statistics/',
         bodyFormData,
         {
             'Content-Type': 'multipart/form-data',
@@ -55,7 +55,7 @@ export const updateActivity = (bodyFormData, activityId) => async (dispatch, get
   } = getState();
   try {
     const { data } = await Axios.put(
-      `http://167.172.167.145:9090/activities/${activityId}`,
+      `http://localhost:9090/open/statistics//${activityId}`,
       bodyFormData,
       {
           'Content-Type': 'multipart/form-data',
@@ -79,7 +79,7 @@ export const getActivity = (id) => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get(`http://167.172.167.145:9090/activities/${id}`, {
+      const { data } = await Axios.get(`http://localhost:9090/open/statistics//${id}`, {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
@@ -98,7 +98,7 @@ export const deleteActivity = (id) => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.delete(`http://167.172.167.145:9090/activities/${id}`, {
+      const { data } = await Axios.delete(`http://localhost:9090/open/statistics//${id}`, {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }

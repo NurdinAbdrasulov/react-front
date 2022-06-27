@@ -9,7 +9,7 @@ export const getAllCategories = () => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.get('http://167.172.167.145:9090/food-categories', {
+        const { data } = await Axios.get('http://localhost:9090/ap/disease-categories', {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }
@@ -28,7 +28,7 @@ export const getCategoryFood = (id) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.get(`http://167.172.167.145:9090/food-categories/${id}`, {
+        const { data } = await Axios.get(`http://localhost:9090/ap/disease-categories/${id}`, {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }
@@ -47,7 +47,7 @@ export const createCategoryFood = (values) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.post(`http://167.172.167.145:9090/food-categories`,
+        const { data } = await Axios.post(`http://localhost:9090/ap/disease-categories`,
         values,
         {
             headers: {
@@ -69,7 +69,7 @@ export const updateCategoryFood = (values, id) => async (dispatch, getState) => 
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.put(`http://167.172.167.145:9090/food-categories/${id}`,
+        const { data } = await Axios.put(`http://localhost:9090/ap/disease-categories/${id}`,
         values,
         {
             headers: {
@@ -90,7 +90,7 @@ export const deleteCategoryFood = (id) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.delete(`http://167.172.167.145:9090/food-categories/${id}`, {
+        const { data } = await Axios.delete(`http://localhost:9090/ap/disease-categories/${id}`, {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }

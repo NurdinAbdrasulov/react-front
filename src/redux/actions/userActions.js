@@ -4,7 +4,7 @@ import { GET_USERAGREEMENT_FAIL, GET_USERAGREEMENT_REQUEST, GET_USERAGREEMENT_SU
 export const signin = (email, password) => async (dispatch) => {
     dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
     try {
-      const { data } = await Axios.post('http://localhost:8080/login', { email, password });
+      const { data } = await Axios.post('http://164.92.155.15:9090/ap/login', { email, password });
       dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
       localStorage.setItem('userInfo', JSON.stringify(data));
     } catch (error) {
@@ -31,7 +31,7 @@ export const getAllUsers = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/users', {
+      const { data } = await Axios.get('http://164.92.155.15:9090/ap/users', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
@@ -50,7 +50,7 @@ export const getUserAgreement = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/documents/user-agreement', {
+      const { data } = await Axios.get('http://164.92.155.15:9090/ap/documents/user-agreement', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
@@ -69,7 +69,7 @@ export const putUserAgreement = (value) => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.put('http://167.172.167.145:9090/documents/user-agreement',
+      const { data } = await Axios.put('http://164.92.155.15:9090/documents/user-agreement',
         value,
         {
           headers: {

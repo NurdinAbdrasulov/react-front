@@ -41,27 +41,27 @@ function SidebarComponent() {
             <MenuItem
                 id={SLUGS.products}
                 items={[SLUGS.editProduct, SLUGS.createProduct]}
-                title='Продукты'
-                icon={IconProducts}
+                title='Заболевания'
+                icon={'IconProducts'}
                 onClick={() => onClick(SLUGS.products)}
             />
             <MenuItem
                 id={SLUGS.categoryProducts}
                 items={[SLUGS.editСategoryProducts, SLUGS.createСategoryProducts]}
-                title='Категории продуктов'
-                icon={IconProducts}
+                title='Категории заболеваний'
+                icon={'IconProducts'}
                 onClick={() => onClick(SLUGS.categoryProducts)}
             />
             <MenuItem
                 id={SLUGS.activity}
                 items={[SLUGS.editActivity, SLUGS.createActivity]}
-                title='Активности'
+                title='Опросы'
                 icon={IconActivity}
                 onClick={() => onClick(SLUGS.activity)}
             />
             <MenuItem
                 id={SLUGS.usersAgreement}
-                title='Пользовательское соглашение'
+                title='Статьи'
                 icon={IconAgreement}
                 onClick={() => onClick(SLUGS.usersAgreement)}
             />

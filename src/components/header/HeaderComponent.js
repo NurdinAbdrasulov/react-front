@@ -38,19 +38,19 @@ function HeaderComponent() {
             title = 'Статистика';
             break;
         case currentItem === SLUGS.users:
-            title = 'Список пользователей';
+            title = 'Пользователи';
             break;
         case currentItem === SLUGS.products:
-            title = 'Список продуктов';
+            title = 'Заболевания';
             break;
         case currentItem.includes((SLUGS.editProduct).substr(0, SLUGS.editProduct.length-3)):
-            title = 'Редактировать продукт';
+            title = 'Редактировать заболевание';
             break;
         case currentItem === SLUGS.createProduct:
-            title = 'Создать продукт';
+            title = 'Создать';
             break;
         case currentItem === SLUGS.categoryProducts:
-            title = 'Список категорий продуктов';
+            title = 'Категорий заболеваний';
             break;
         case currentItem.includes((SLUGS.editСategoryProducts).substr(0, SLUGS.editСategoryProducts.length-3)):
             title = 'Редактировать категорию';
@@ -59,7 +59,7 @@ function HeaderComponent() {
             title = 'Создать категорию';
             break;
         case currentItem === SLUGS.activity:
-            title = 'Список активностей';
+            title = 'Список опросов';
             break;
         case currentItem.includes((SLUGS.editActivity).substr(0, SLUGS.editActivity.length-3)):
             title = 'Редактировать активность';
@@ -68,7 +68,7 @@ function HeaderComponent() {
             title = 'Создать активность';
             break;
         case currentItem === SLUGS.usersAgreement:
-            title = 'Пользовательское соглашение';
+            title = 'Статьи';
             break;
         default:
             title = '';

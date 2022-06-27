@@ -11,7 +11,7 @@ const SLUGS = {
     activity: '/activity',
     createActivity: '/activity/createActivity',
     editActivity: '/activity/editActivity/:id',
-    usersAgreement: '/usersAgreement',
+    usersAgreement: '/articles',
     // auth
     login: '/login',
 };

@@ -9,7 +9,7 @@ export const getAllFoods = () => async (dispatch, getState) => {
       userSignin: { userInfo },
   } = getState();
   try {
-      const { data } = await Axios.get('http://167.172.167.145:9090/food', {
+      const { data } = await Axios.get('http://localhost:9090/ap/disease', {
           headers: {
               'Authorization': `Bearer ${userInfo.jwt}`
           }
@@ -28,7 +28,7 @@ export const getFood = (id) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.get(`http://167.172.167.145:9090/food/${id}`, {
+        const { data } = await Axios.get(`localhost:9090/ap/disease/${id}`, {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }
@@ -47,7 +47,7 @@ export const createFood = (values) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.post(`http://167.172.167.145:9090/food`,
+        const { data } = await Axios.post(`localhost:9090/ap/disease`,
         values,
         {
             headers: {
@@ -69,7 +69,7 @@ export const updateFood = (values, id) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.put(`http://167.172.167.145:9090/food/${id}`,
+        const { data } = await Axios.put(`localhost:9090/ap/disease/${id}`,
         values,
         {
             headers: {
@@ -90,7 +90,7 @@ export const deleteFood = (id) => async (dispatch, getState) => {
         userSignin: { userInfo },
     } = getState();
     try {
-        const { data } = await Axios.delete(`http://167.172.167.145:9090/food/${id}`, {
+        const { data } = await Axios.delete(`localhost:9090/ap/disease/${id}`, {
             headers: {
                 'Authorization': `Bearer ${userInfo.jwt}`
             }

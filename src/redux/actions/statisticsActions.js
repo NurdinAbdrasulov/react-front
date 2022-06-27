@@ -10,12 +10,12 @@ export const getStatistics = () => async (dispatch, getState) => {
     } = getState();
     try {
         const data = await axios.all([
-            axios.get('http://167.172.167.145:9090/statistics/age', {
+            axios.get('http://localhost:9090/open/statistics/', {
                 headers: {
                     'Authorization': `Bearer ${userInfo.jwt}`
                 }
             }),
-            axios.get('http://167.172.167.145:9090/statistics/diabetes', {
+            axios.get('http://localhost:9090/open/statistics/', {
                 headers: {
                     'Authorization': `Bearer ${userInfo.jwt}`
                 }
